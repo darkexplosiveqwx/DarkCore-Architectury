@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "darkcore",
+  "version": "${version}",
+  "name": "Darkcore",
+  "description": "",
+  "authors": [
+    "darkexplosiveqwx"
+  ],
+  "contact": {
+    "website": "https://github.com/darkexplosiveqwx/DarkCore-Architectury",
+    "repo": "https://github.com/darkexplosiveqwx/DarkCore-Architectury",
+    "issues": "https://github.com/darkexplosiveqwx/DarkCore-Architectury/issues"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.darkexplosiveqwx.darkcore.fabric.DarkcoreFabric"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": ">=1.19.2"
+  }
+}
