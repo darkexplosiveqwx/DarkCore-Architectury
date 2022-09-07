@@ -1,6 +1,36 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
+
+
+    id 'eclipse'
+    id 'maven-publish'
+    id 'java'
+    id "com.diffplug.spotless" version "5.12.4+"
+    id "com.matthewprenger.cursegradle" version "1.4.0+"
+    id "com.modrinth.minotaur" version "1.2.1+"
+    id "idea"
+    id 'org.parchmentmc.compass' version '0.8.1+'
+    id 'org.parchmentmc.writtenbooks' version '0.5.+'
+    id 'java-base'
+    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.71.4+'
 }
+
+//apply plugin: 'org.spongepowered.mixin'
+//apply plugin: 'net.minecraftforge.gradle' version '5.1.+'
+
+
 architectury {
     platformSetupLoomIde()
     forge()
@@ -13,6 +43,40 @@ configurations {
     runtimeClasspath.extendsFrom common
     developmentForge.extendsFrom common
 }
+repositories {
+    // Put repositories for dependencies here
+    // ForgeGradle automatically adds the Forge maven and Maven Central for you
+
+    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
+    // flatDir {
+    //     dir 'libs'
+    // }
+
+    mavenLocal()
+    mavenCentral()
+    maven {url "https://maven.shedaniel.me/"}
+    maven {url "https://maven.bai.lol"}
+    maven {url "https://maven.parchmentmc.net/"}
+    maven {url = 'https://maven.cafeteria.dev/releases/' }
+    maven {url = 'https://maven.melanx.de/'}
+    maven {url = uri("https://repo.spongepowered.org/repository/maven-public/")}
+    maven {url "https://maven.blamejared.com/"}
+    maven {url 'https://maven.blakesmods.com'}
+    maven {url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'}
+    maven { url "https://maven.theillusivec4.top/" }
+    maven { url "https://maven.tterrag.com/" }
+    maven { url "https://minecraft.curseforge.com/api/maven/" }
+    maven {url "https://www.cursemaven.com"}
+    maven {url = 'https://maven.maxhenkel.de/repository/public'}
+    maven {url "https://maven.florens.be"}
+    maven {url "https://maven.ryanliptak.com/" }
+    maven {url 'https://squiddev.cc/maven/'}
+    maven {url = uri("https://modmaven.dev/")}
+    maven {url = uri("https://dvs1.progwml6.com/files/maven/")}
+    maven {url = file("libs").toURI()}
+    mavenCentral()
+}
+
 
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
@@ -21,6 +85,190 @@ dependencies {
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+
+
+    // compile against the JEI API but do not include it at runtime
+    compileOnly "mezz.jei:jei-${rootProject.mc_version}-common-api:${rootProject.jei_version}"
+    compileOnly"mezz.jei:jei-${rootProject.mc_version}-forge-api:${rootProject.jei_version}"
+    // at runtime, use the full JEI jar for Forge
+    runtimeOnly"mezz.jei:jei-${rootProject.mc_version}-forge:${rootProject.jei_version}"
+
+
+    compileOnly"mekanism:Mekanism:${rootProject.mc_version}-${rootProject.mekanism_version}:api"
+    compileOnly"mekanism:Mekanism:${rootProject.mc_version}-${rootProject.mekanism_version}:all"
+    runtimeOnly"mekanism:Mekanism:${rootProject.mc_version}-${rootProject.mekanism_version}:all"
+
+    implementation"appeng:appliedenergistics2:${rootProject.ae2_version}"
+
+    runtimeOnly "curse.maven:mekanism-268560:3922056"
+
+
+
+    annotationProcessor "org.moddingx:LibX:${rootProject.mc_version}-${rootProject.libx_version}"
+    implementation "org.moddingx:LibX:${rootProject.mc_version}-${rootProject.libx_version}"
+
+
+    compileOnly "vazkii.patchouli:Patchouli:${rootProject.mc_version}-${rootProject.patchouli_version}:api"
+    compileOnly "vazkii.patchouli:Patchouli:${rootProject.mc_version}-${rootProject.patchouli_version}:"
+    runtimeOnly "vazkii.patchouli:Patchouli:${rootProject.mc_version}-${rootProject.patchouli_version}:api"
+    runtimeOnly "vazkii.patchouli:Patchouli:${rootProject.mc_version}-${rootProject.patchouli_version}"
+
+    compileOnly "vazkii.autoreglib:AutoRegLib:${rootProject.arl_version}"
+    runtimeOnly "vazkii.autoreglib:AutoRegLib:${rootProject.arl_version}"
+
+
+
+    implementation 'software.bernie.geckolib:geckolib-forge-1.19:3.1.16'
+
+
+    //will work
+
+
+    implementation"com.blakebr0.cucumber:Cucumber:${rootProject.mc_old_version}-${rootProject.cl_version}"
+    implementation"com.blakebr0.mysticalagriculture:MysticalAgriculture:${rootProject.mc_old_version}-${rootProject.mac_version}"
+    implementation"com.blakebr0.mysticalagradditions:MysticalAgradditions:${rootProject.mc_old_version}-${rootProject.myst_agraradditions_version}"
+    implementation"com.blakebr0.mysticalcustomization:MysticalCustomization:${rootProject.mc_old_version}-${rootProject.myst_custom_version}"
+    implementation"com.blakebr0.pickletweaks:PickleTweaks:${rootProject.mc_old_version}-${rootProject.pickle_tweaks_version}"
+    implementation"com.blakebr0.morebuckets:MoreBuckets:${rootProject.mc_old_version}-${rootProject.more_buckets_version}"
+
+    implementation"com.blakebr0.extendedcrafting:ExtendedCrafting:${rootProject.mc_old_version}-${rootProject.extended_crafting_version}"
+    //implementation"com.blakebr0.ironjetpacks:IronJetpacks:${rootProject.mc_old_version}-${rootProject.iron_jetpacks_version}"
+
+
+    compileOnly "top.theillusivec4.curios:curios-forge:${rootProject.curios_version}:api"
+    compileOnly "top.theillusivec4.curios:curios-forge:${rootProject.curios_version}"
+    runtimeOnly "top.theillusivec4.curios:curios-forge:${rootProject.curios_version}"
+
+    compileOnly ("curse.maven:balm-531761:${rootProject.balm_cf_file_id}")
+    compileOnly ("curse.maven:craftingtweaks-233071:${rootProject.crafting_tweaks_cf_file_id}")
+    runtimeOnly ("curse.maven:craftingtweaks-233071:${rootProject.crafting_tweaks_cf_file_id}")
+    runtimeOnly ("curse.maven:balm-531761:${rootProject.balm_cf_file_id}")
+
+    //compileOnly ("mcjty.theoneprobe:TheOneProbe-${rootProject.top_version}")
+    //runtimeOnly ("mcjty.theoneprobe:TheOneProbe-${rootProject.top_version}")
+
+
+    //implementation ("com.github.glitchfiend:TerraBlender-forge:${rootProject.mc_version}-${rootProject.tb_version}")
+
+
+    compileOnly ("curse.maven:the-one-probe-245211:3606616")
+    runtimeOnly ("curse.maven:the-one-probe-245211:3606616")
+
+
+    //implementation f("curse.maven:cyclopscore-${rootProject.cyclopscore_version}")
+
+    //compile "net.darkhax.darkutilities:DarkUtilities-${rootProject.mc_version}:${rootProject.dark_utilities_version}"
+
+    //implementation ("teamtwilight:twilightforest:${rootProject.twilightforest_version}:universal")
+
+
+    //runtimeOnly ("curse.maven:curious-armor-stands-398784:3579775")
+    //compileOnly ("curse.maven:curious-armor-stands-398784:3579775")
+    //implementation ("be.florens:expandability-forge:6.0.0")
+
+    compileOnly ('curse.maven:controllable-317269:3873303')
+    runtimeOnly ('curse.maven:configured-457570:3872190')
+
+    runtimeOnly ("top.theillusivec4.curios:curios-forge:${rootProject.curios_version}")
+    compileOnly ("top.theillusivec4.curios:curios-forge:${rootProject.curios_version}:api")
+
+    // d implementation fg.deobf("curse.maven:badpackets-615134:3773642")
+    //implementation fg.deobf("curse.maven:wthit-455982:3856256")
+    //compileOnly fg.deobf("curse.maven:jade-324717:3834997")
+
+    //compileOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:5.0.38")
+    //testCompileOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:5.0.38")
+
+
+    //compileOnly fg.deobf("squeek.appleskin:appleskin-forge:${apple_skin_version}:api")
+    //runtimeOnly fg.deobf("squeek.appleskin:appleskin-forge:${apple_skin_version}")
+
+    compileOnly ("curse.maven:CYCLIC-239286:3708026")
+    runtimeOnly ("curse.maven:CYCLIC-239286:3708026")
+
+    compileOnly ("org.squiddev:cc-tweaked-${rootProject.mc_old_version}:${rootProject.cc_tweaked_version}")
+    compileOnly ("blusunrize.immersiveengineering:ImmersiveEngineering:${rootProject.immersive_engineering_version}")
+    runtimeOnly ("org.squiddev:cc-tweaked-${rootProject.mc_old_version}:${rootProject.cc_tweaked_version}")
+    runtimeOnly ("blusunrize.immersiveengineering:ImmersiveEngineering:${rootProject.immersive_engineering_version}")
+
+    compileOnly ("net.darkhax.gamestages:GameStages-Forge-${rootProject.mc_old_version}:${rootProject.gamestages_version}")
+    //runtimeOnly ("net.darkhax.gamestages:GameStages-Forge-${rootProject.mc_old_version}:${rootProject.gamestages_version}")
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+
+    compileOnly ("curse.maven:quark-243121:${rootProject.quark_cf_file_id}")
+    compileOnly ("curse.maven:autoreglib-250363:${rootProject.autoreglib_cf_file_id}")
+    runtimeOnly ("curse.maven:quark-243121:${rootProject.quark_cf_file_id}")
+    runtimeOnly ("curse.maven:autoreglib-250363:${rootProject.autoreglib_cf_file_id}")
+
+    if (findProject(':SophisticatedCore') != null) {
+        implementation project(':SophisticatedCore')
+    } else {
+        compileOnly ("curse.maven:sophisticatedcore-618298:${rootProject.sc_cf_file_id}")
+        runtimeOnly ("curse.maven:sophisticatedcore-618298:${rootProject.sc_cf_file_id}")
+    }
+
+    /*compileOnly fg.deobf("mcjty.theoneprobe:theoneprobe:${rootProject.top_version}") {
+        exclude group: "net.minecraftforge", module: "forge"
+    }
+    implementation fg.deobf("curse.maven:jade-324717:${rootProject.jade_curse_id}")
+
+    for (extraModJar in fileTree(dir: extraModsDir, include: '*.jar')) {
+        def basename = extraModJar.name.substring(0, extraModJar.name.length() - ".jar".length())
+        def versionSep = basename.lastIndexOf('-')
+        assert versionSep != -1
+        def artifactId = basename.substring(0, versionSep)
+        def version = basename.substring(versionSep + 1)
+        runtimeOnly fg.deobf("extra-mods:$artifactId:$version")
+    }
+**/
+
+    // compileOnly fg.deobf(group: 'info.journeymap', name: 'journeymap-api', version: project.journeymap_api_forge_version, changing: true)
+    // runtimeOnly fg.deobf("curse.maven:journeymap-${rootProject.journeymap_project_id}:${rootProject.journeymap_forge_file_id}")
+
+    //compileOnly(fg.deobf("me.shedaniel.cloth:cloth-config-forge:8.0.75"))
+    //runtimeOnly(fg.deobf("me.shedaniel.cloth:cloth-config-forge:8.0.75"))
+
+    //implementation fg.deobf("curse.maven:jade-324717:3544015")
+    //implementation fg.deobf("curse.maven:storage-drawers-223852:3574029")
+
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'org.jetbrains:annotations:23.0.0'
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+    annotationProcessor 'com.google.code.gson:gson:2.9.0'
+    annotationProcessor 'com.google.guava:guava:31.1-jre'
+    annotationProcessor 'org.ow2.asm:asm-tree:9.3'
+    annotationProcessor 'org.ow2.asm:asm-commons:9.3'
+    annotationProcessor 'org.ow2.asm:asm-util:9.3'
+
+    //implementation "org.moddingx:CurseWrapper:3.0"
+
+    implementation 'org.jsoup:jsoup:1.15.3'
+    implementation "net.sf.jopt-simple:jopt-simple:6.0-alpha-3"
+
+
+
+    // Real mod deobf dependency examples - these get remapped to your current mappings
+    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
+    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
+    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
+
+    // Examples using mod jars from ./libs
+    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
+
+
+
+
+
+
+
+    // For more info...
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+
 }
 
 processResources {

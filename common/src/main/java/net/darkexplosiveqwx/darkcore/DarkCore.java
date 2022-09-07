@@ -1,6 +1,6 @@
 package net.darkexplosiveqwx.darkcore;
 
-public class Darkcore
+public class DarkCore
 {
 	public static final String MOD_ID = "darkcore";
 
