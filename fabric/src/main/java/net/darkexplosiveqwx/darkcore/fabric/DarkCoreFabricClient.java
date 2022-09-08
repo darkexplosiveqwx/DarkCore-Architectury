@@ -1,11 +1,17 @@
 package net.darkexplosiveqwx.darkcore.fabric;
 
-import net.darkexplosiveqwx.darkcore.DarkCore;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
-public class DarkCoreFabric implements ModInitializer {
+/**
+ * @author darkexplosiveqwx
+ */
+public class DarkCoreFabricClient implements ClientModInitializer {
+
+    /**
+     * Runs the mod initializer on the client environment.
+     */
     @Override
-    public void onInitialize() {
-        DarkCore.init();
+    public void onInitializeClient() {
+
     }
 }
