@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "darkcore",
-  "version": "${version}",
+  "version": "0.0.1-SNAPSHOT",
   "name": "Darkcore",
   "description": "",
   "authors": [
@@ -18,10 +18,18 @@
   "entrypoints": {
     "main": [
       "net.darkexplosiveqwx.darkcore.fabric.DarkcoreFabric"
+    ],
+    "client": [
+      "net.darkexplosiveqwx.darkcore.fabric.DarkCoreFabricClient"
     ]
   },
+  "mixins": [
+    "darkcore.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.14.9",
-    "minecraft": ">=1.19.2"
+    "fabric": "*",
+    "minecraft": ">=1.19.2",
+    "java": ">=17.0.0"
   }
 }
